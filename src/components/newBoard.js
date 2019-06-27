@@ -1,43 +1,29 @@
-import React, { Component } from "react";
+import React from "react";
 
-class NewBoard extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            value: '',
-            tasks: [],
-            boardId: 0,
-            buttonStatus: true
-        }
-    }
-    onChangeInput =  (event) => {
-        this.setState({value: event.target.value, buttonStatus: false})
-    }
-    addTask = () => {
-        let task = this.state.value;
-        let tasks = [...this.state.tasks, task]
-        this.setState({value: '', tasks, buttonStatus: true})
-    }
-
-    render() {
-        console.log(this.props)
-        return (
-            <div style={{padding: 10}}>
-                <div>{this.props.title}</div>
-               <div style={{display: 'flex'}}>
-                    <input type="text" value={this.state.value} onChange={this.onChangeInput}></input>
-                    <button disabled={this.state.task ? this.state.buttonStatus : this.state.buttonStatus} onClick={()=>this.addTask()}>Add Task</button>
-               </div>
-               <div>
-                   {
-                       this.state.tasks && this.state.tasks.map(value => {
-                           return <li>{value}</li>
-                       })
-                   }
-               </div>
+const NewBoard = ({boardId, boardTitle, addTask, addTaskChange, tasks, onChangeStatus, status}) => {
+    let currId = boardId
+    return (
+        <div style={{padding: 10}}>
+            <div><span>{boardId}</span>. <span>{boardTitle}</span></div>
+            <div style={{display: 'flex'}}>
+                <input refs={boardId} onChange={(e)=>addTaskChange(e)} type="text" ></input>
+                {/* <select value={status} onChange={(e)=>onChangeStatus(e, currId)}>
+                    {["pending", "In-Process", "Done"].map( (option, index)  => {
+                        return <option value={option} key={option} >{option}</option>
+                    })}
+                </select> */}
+                <button onClick={()=>addTask(boardId)}>Add Task</button>
             </div>
-        )
-    }
+            <div>
+
+                {
+                    tasks && tasks.map( ({taskName, boardId}) => {
+                       return currId===boardId && <li>{taskName}</li>
+                    })
+                }
+            </div>
+        </div>
+    )     
 }
 
 export default NewBoard
