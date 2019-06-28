@@ -1,26 +1,23 @@
 import React from "react";
+import FilterTask from './FilterTasks';
 
-const NewBoard = ({boardId, boardTitle, addTask, addTaskChange, tasks, onChangeStatus, status}) => {
+const NewBoard = ({boardId, commentChange, comments, addComment, filterTasks, boardTitle, addTask, addTaskChange, tasks, onChangeStatus, status}) => {
     let currId = boardId
     return (
-        <div style={{padding: 10}}>
-            <div><span>{boardId}</span>. <span>{boardTitle}</span></div>
+        <div style={{padding: 10, margin: 10, height: 200, overflow: "scroll", border: '1px solid #000'}}>
+            <div><span>{boardTitle}</span></div>
             <div style={{display: 'flex'}}>
-                <input refs={boardId} onChange={(e)=>addTaskChange(e)} type="text" ></input>
-                {/* <select value={status} onChange={(e)=>onChangeStatus(e, currId)}>
-                    {["pending", "In-Process", "Done"].map( (option, index)  => {
-                        return <option value={option} key={option} >{option}</option>
+                <input placeholder="add task" onChange={(e)=>addTaskChange(e, currId)} type="text" ></input>
+                <select value={status} name={"status"+currId} onChange={(e)=>onChangeStatus(e, currId)}>
+                    {["pending", "inprocess", "done"].map( (option, index)  => {
+                        return <option value={option} key={index} >{option}</option>
                     })}
-                </select> */}
+                </select>
                 <button onClick={()=>addTask(boardId)}>Add Task</button>
             </div>
             <div>
-
-                {
-                    tasks && tasks.map( ({taskName, boardId}) => {
-                       return currId===boardId && <li>{taskName}</li>
-                    })
-                }
+                <FilterTask comments={comments} filterTasks={filterTasks} commentChange={commentChange} addComment={addComment} tasks={tasks} boardId={currId}/>
+                    
             </div>
         </div>
     )     
